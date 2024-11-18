@@ -1,0 +1,101 @@
+body {
+    background-image: url('../img/bg-img/recipebg.jpg'); /* 배경 경로 수정 */
+    background-size: cover; /* 이미지가 전체 배경을 덮도록 설정 */
+    background-repeat: no-repeat; /* 이미지가 반복되지 않도록 설정 */
+    background-position: center; /* 이미지가 중앙에 오도록 설정 */
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    height: 100vh; /* 화면 전체 높이를 사용 */
+    text-align: center; /* 모든 텍스트를 가운데 정렬 */
+    flex-direction: column; /* 제목과 폼이 세로로 나열되도록 설정 */
+    padding-bottom: 50px; /* 페이지 맨 아래에 여백 추가 */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 폼 요소들을 수평 중앙 정렬 */
+    justify-content: center; /* 폼 요소들을 수직 중앙 정렬 */
+    width: 80%;
+    max-width: 700px; /* 폼의 최대 너비를 넓힘 */
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ddd; /* 폼을 감싸는 회색 테두리 */
+    margin-bottom: 50px; /* 폼 하단에 여백 추가 */
+}
+
+
+h2 {
+    font-size: 28px; /* 제목 폰트 크기 키움 */
+    color: #333;
+    margin-top: 40px; /* 페이지 상단에서 제목 간격 */
+    margin-bottom: 30px; /* 제목과 폼 사이의 간격 */
+}
+
+table {
+    width: 100%;
+    margin-bottom: 30px;
+    border-collapse: collapse; /* 테이블의 테두리가 겹치지 않도록 설정 */
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ccc; /* 셀을 구분하는 회색 선 추가 */
+}
+
+th {
+    background-color: #f2f2f2;
+    font-size: 18px; /* 테이블 제목 폰트 크기 키움 */
+}
+
+td {
+    font-size: 16px; /* 데이터 셀 폰트 크기 키움 */
+}
+
+input[type="text"], textarea, input[type="file"], input[type="submit"] {
+    width: 95%; /* 입력 박스의 너비를 95%로 설정하여 선과 간격을 맞춤 */
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc; /* 입력 박스에 회색 선 추가 */
+    border-radius: 5px;
+    font-size: 16px; /* 입력 폼의 글자 크기 키움 */
+}
+
+textarea {
+    resize: vertical; /* 세로 크기 조절 가능 */
+    font-size: 16px; /* 텍스트 영역 폰트 크기 키움 */
+}
+
+input[type="submit"], input[type="reset"] {
+    font-size: 14px; /* 버튼 글자 크기 */
+    padding: 8px 16px; /* 버튼 안의 여백 */
+    margin: 10px; /* 버튼 간격 */
+    background-color: #4CAF50; /* 버튼 배경색 */
+    color: white; /* 글자 색 */
+    border: none; /* 테두리 제거 */
+    border-radius: 5px; /* 둥근 모서리 */
+    cursor: pointer; /* 마우스 커서 변경 */
+    transition: background-color 0.3s ease; /* 배경색 전환 */
+    width: 150px; /* 버튼 너비 설정 */
+}
+
+input[type="submit"]:hover, input[type="reset"]:hover {
+    background-color: #45a049; /* 호버 시 버튼 배경색 */
+}
+
+input[type="reset"] {
+    background-color: #4CAF50; /* 초기화 버튼 배경색 */
+}
+
+input[type="reset"]:hover {
+    background-color: #45a049; /* 초기화 버튼 호버 시 배경색 */
+}
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>찜 목록</title>
+  <link rel="stylesheet" href="/css/wish.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+
+<header class="header-area">
+  <div th:replace="~{header.html}"></div> <!-- Include header.html dynamically with Thymeleaf -->
+</header>
+
+<!-- 찜 목록 표시 -->
+<div class="container">
+  <div class="col">
+    <h1>찜 목록</h1>
+    <!-- 찜한 상품이 있을 때 -->
+    <div id="wish-list-container">
+      <!-- 여기에 동적으로 찜 목록 아이템을 삽입 -->
+    </div>
+    <!-- 찜 목록이 비어 있을 때 표시 -->
+    <div id="empty-wish-message" style="display: none;">
+      <p>찜 목록이 비어 있습니다.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div th:replace="~{footer.html}"></div> <!-- Include footer.html dynamically with Thymeleaf -->
+</footer>
+
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<script src="/js/bootstrap/popper.min.js"></script>
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/plugins/plugins.js"></script>
+<script src="/js/active.js"></script>
+
+<script>
+  // 찜 목록 데이터를 서버로부터 받아와서 동적으로 표시하기
+  $(document).ready(function() {
+    $.ajax({
+      type: "POST",
+      url: "/WishList", // 찜 목록 데이터를 반환하는 API 엔드포인트
+      success: function(response) {
+          // 데이터가 배열이고 아이템이 있을 때 처리
+          response.forEach(function(item) {
+            let wishItem = '';
+            // 상품이 있을 경우
+            if (item.wpnum) {
+              wishItem += `
+                <div class="wishlist-item">
+                  <div>
+                    <img src="/img/상품사진/product${item.wpnum}.jpg" alt="상품 ${item.wpnum}" class="wishlist-item-img" style="width: 300px; height: 300px"/>
+                    <h5>${item.wpname}</h5>
+                    <h5>${item.wprice}</h5>
+                  </div>
+                  <span id="remove" data-wnum="${item.wnum}">찜 목록에서 제거</span>
+                </div>
+              `;
+            }
+            // 레시피가 있을 경우
+            if (item.wrnum) {
+              wishItem += `
+                <div class="wishlist-item">
+                  <div>
+                    <img src="/images/${item.wrnum}.jpg" alt="${item.wrnum}" class="wishlist-item-img" style="width: 300px; height: 300px"/>
+                    <h5>${item.wrtitle}</h5>
+                  </div>
+                  <span id="remove" data-wnum="${item.wnum}">찜 목록에서 제거</span>
+                </div>
+              `;
+            }
+
+            // 각각의 항목을 동적으로 추가
+            if (wishItem) {
+              $('#wish-list-container').append(wishItem);
+            }
+          });
+        },
+      error: function(error) {
+        console.error("찜 목록을 불러오는 중 오류 발생:", error);
+      }
+    });
+
+    // 찜 목록에서 아이템 제거
+    $(document).on("click", "#remove", function () {
+      let WNum = $(this).data("wnum");
+      $.ajax({
+        type: "POST",
+        url: `/deleteWish/${WNum}`, // 아이템 제거를 위한 서버 URL
+        success: function () {
+          alert('아이템이 찜 목록에서 제거되었습니다.');
+          location.reload();  // 목록 갱신 (페이지 새로고침)
+        },
+        error: function (error) {
+          console.error("아이템 제거 중 오류 발생:", error);
+        }
+      });
+    });
+  });
+</script>
+<script src="/js/dropdown.js"></script>
+</body>
+</html>

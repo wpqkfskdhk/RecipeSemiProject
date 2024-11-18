@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/bview.css">
+    <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+
+    <title>문의글 상세보기</title>
+</head>
+
+<body>
+<div id="modiForm1">
+    <table>
+        <caption>문의글 상세보기</caption>
+        <tr>
+            <th>번호</th>
+            <td>[[${view.BNum}]]</td>
+        </tr>
+        <tr>
+            <th>작성자</th>
+            <td>[[${view.BWriter}]]</td>
+        </tr>
+        <tr>
+            <th>제목</th>
+            <td>[[${view.BTitle}]]</td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td>[[${view.BContent}]]</td>
+        </tr>
+        <tr>
+            <th>작성일</th>
+            <td>[[${view.BDate}]]</td>
+        </tr>
+        <tr>
+            <th>조회수</th>
+            <td>[[${view.BHit}]]</td>
+        </tr>
+        <tr>
+            <th>첨부파일</th>
+            <td>
+                <img th:src="@{|/upload/${view.BFileName}|}" width="200px"/>
+                <br/>[[${view.BFileName}]]
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2" style="text-align: center;">
+                <button id="modify">수정</button>
+                <button id="delete">삭제</button>
+            </th>
+        </tr>
+    </table>
+
+    <!-- 댓글 작성 -->
+    <div th:if="${session.loginId ne null}" id="cmtWrite">
+        <textarea rows="3" cols="30" id="CContent"></textarea>
+        <button id="writeBtn">댓글 입력</button>
+    </div>
+
+    <!-- 댓글 목록 -->
+    <div id="cmtArea"></div>
+
+</div>
+
+<div id="modiForm2">
+    <h2>게시글 수정 페이지</h2>
+
+    <form action="/bModify" method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <th>제목</th>
+                <td><input type="text" name="BTitle" th:placeholder="${view.BTitle}"/></td>
+            </tr>
+
+            <tr>
+                <th>내용</th>
+                <td>
+                        <textarea name="BContent" rows="20" cols="40">
+                            [[${view.BContent}]]
+                        </textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <th>첨부파일</th>
+                <td>
+                    <input type="file" id="BFile" name="BFile"/>
+                    <input type="hidden" name="BFileName" th:value="${view.BFileName}"/>
+                    <br/> <img id="preImage" width="150px" th:src="@{|/upload/${view.BFileName}|}"/>
+                </td>
+            </tr>
+
+            <tr>
+                <th colspan="2" style="text-align: center;">
+                    <input type="hidden" name="BNum" th:value="${view.BNum}"/>
+                    <input type="hidden" name="BWriter" th:value="${view.BWriter}"/>
+                    <input type="submit"  value="수정"/>
+                </th>
+            </tr>
+        </table>
+    </form>
+</div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script>
+
+    $(()=>{
+
+        $('#writeBtn').click(()=>{
+            if(confirm('댓글을 입력하시겠습니까?')){
+                $.ajax({
+                    type: "POST",
+                    url : "/cWrite",
+                    data : {
+                        "CBNum" : "[[${view.BNum}]]",
+                        "CWriter" : '[[${session.loginId}]]',
+                        "CContent" : $('#CContent').val()
+                    },
+                    dataType: "json",
+                    success : (list) => {
+                        $('#CContent').val(""); // 댓글입력창 초기화
+                        cmtList(list);      // 댓글 목록
+                    },
+                    error : ()=>{
+                        alert('cWrite 통신 실패!');
+                    }
+                });
+            }
+        });
+
+        $('#modiForm2').hide();
+
+        $('#modify').click(() => {
+            $('#modiForm2').show();
+            $('#modiForm1').hide();
+        });
+
+        $('#delete').click(() => {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                location.href = `/bDelete?bNum=[[${view.BNum}]]&bFileName=[[${view.BFileName}]]`;
+            }
+        });
+
+        $('#BFile').on('change', function (event) {
+            let file = event.target.files[0];
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#preImage').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+        });
+
+        function cmtList(list){
+            let output = "";
+            output +=
+                `<table>
+                    <tr>
+                        <th>작성자</th>
+                        <th>내용</th>
+                        <th>작성일</th>
+                        <th>수정</th>
+                        <th>삭제</th>
+                    </tr>
+                `;
+
+            for(let i in list){
+                output +=
+                    `<tr>
+                        <td>${list[i].cwriter}</td>
+                        <td>${list[i].ccontent}</td>
+                        <td>${list[i].cdate.substring(0, 10)}</td>
+                    `;
+
+                if('[[${session.loginId}]]' == list[i].cwriter){
+                    output +=
+                        `
+                        <td><button class="cmodify" style="text-align: center;" value="${list[i].cnum}">수정</button>
+                        <td><button class="cdelete" style="text-align: center;" value="${list[i].cnum}">삭제</button>
+                        `;
+                } else {
+                    output += `<td></td><td></td>`;
+                }
+                output += `</tr>`;
+            }
+
+            output += `</table>`;
+
+            $('#cmtArea').html(output);
+
+            // 수정 삭제는 cmtList 함수 안에서 진행
+            $('.cmodify').click((e)=>{
+                // console.log("CNum : " + e.target.value);
+                $.ajax({
+                    type : "POST",
+                    url : "/cWrite",
+                    data : {
+                        "CNum" : e.target.value,
+                        "CBNum" : "[[${view.BNum}]]",
+                        "CContent" : $('#CContent').val(),
+                        "CWriter" : `[[${session.loginId}]]`
+                    },
+                    dataType : "json",
+                    success : (list) => {
+                        $('#CContent').val("");
+                        cmtList(list);
+                    },
+                    error : ()=>{
+                        alert('cModify 통신 실패!');
+                    }
+                });
+            });
+
+            $('.cdelete').click((e)=>{
+                if(confirm('댓글을 삭제하시겠습니까?')){
+                    $.ajax({
+                        type : "POST",
+                        url : "/cDelete",
+                        data : {
+                            "CNum" : e.target.value,
+                            "CBNum" : "[[${view.BNum}]]"
+                        },
+                        dataType : "json",
+                        success : (list) => {
+                            cmtList(list);
+                        },
+                        error : ()=>{
+                            alert('cDelete 통신 실패!');
+                        }
+                    });
+                }
+            });
+
+        }
+
+        $.ajax({
+            type : "POST",
+            url : "/cList",
+            data : { "CBNum" : "[[${view.BNum}]]" },
+            dataType : "json",
+            success : (list) => {
+                console.log(list);
+                cmtList(list);
+            },
+            error : ()=>{
+                alert('cList 통신 실패!');
+            }
+        });
+
+
+    });
+
+
+
+
+</script>
+
+</html>

@@ -1,0 +1,49 @@
+.wishlist-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 15px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background-color: #f9f9f9;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block; /* 인라인 블록으로 설정 */
+    width: 30%; /* 각 아이템의 너비를 30%로 설정하여 세 개가 가로로 배치되도록 함 */
+    vertical-align: top; /* 세로 정렬을 위로 맞춤 */
+    box-sizing: border-box; /* 패딩과 테두리가 너비에 포함되도록 설정 */
+}
+
+.wishlist-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.wishlist-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.wishlist-item h5 {
+    margin-top: 12px;
+    font-size: 20px;
+    color: #444;
+    font-weight: 600;
+}
+
+.wishlist-item .btn-danger {
+    margin-top: 12px;
+    background-color: #d9534f;
+    border: none;
+    padding: 8px 15px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.wishlist-item .btn-danger:hover {
+    background-color: #c9302c;
+    transform: scale(1.05);
+}

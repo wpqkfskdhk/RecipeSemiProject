@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/css/product.css">
+  <link rel="icon" href="/img/core-img/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <title>상품</title>
+</head>
+
+<body>
+<header class="header-area">
+  <!-- Header Area -->
+  <div th:replace="~{header.html}"></div>
+</header>
+
+<div class="container mt-5">
+  <div class="InputContainer">
+    <select id="category">
+      <option value="PName">상품이름</option>
+      <option value="PCategory">상품카테고리</option>
+    </select>
+    <input class="input" type="text" id="keyword" placeholder="검색어를 입력하세요" />
+    <button id="searchBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="11" cy="11" r="7" stroke="rgb(34, 139, 34)" stroke-width="2"/>
+        <line x1="16" y1="16" x2="21" y2="21" stroke="rgb(34, 139, 34)" stroke-width="2"/>
+      </svg>
+    </button>
+  </div>
+
+
+  <!-- 상품 목록을 표시할 영역 -->
+  <div class="row" id="product-list"></div>
+
+  <!-- 페이징 번호를 표시할 영역 -->
+  <div id="numbering" class="mt-4"></div>
+</div>
+<footer class="footer-area">
+  <div th:replace="~{footer.html}"></div>
+</footer>
+</body>
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<script src="/js/bootstrap/popper.min.js"></script>
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/plugins/plugins.js"></script>
+<script src="/js/active.js"></script>
+<script>
+  $('#join').click(()=>{
+    location.href="/mJoinForm"
+  })
+  $('#login').click(()=>{
+    location.href="/mLoginForm"
+  })
+  $('#cart').click(()=>{
+    location.href="/cart"
+  })
+  $('.product').click(()=>{
+    location.href="/product"
+  })
+</script>
+<script>
+  let list = [];
+  let page = 1;
+  const limit = 50;
+  const block = 5;
+
+  // 게시글 검색
+  $('#searchBtn').click(() => {
+    const category = $('#category').val();
+    const keyword = $('#keyword').val();
+
+
+
+    $.ajax({
+      type: "POST",
+      url: "searchList",
+      data: { category, keyword },
+      dataType: "json",
+      success: (result) => {
+        list = result;
+        pagingList(page, list);
+      },
+      error: () => {
+        alert('searchList 통신 실패!');
+      }
+    });
+  });
+
+  // 상품 목록 가져오기
+  $(document).ready(function() {
+
+    $.ajax({
+      type: "POST",
+      url: "/addProduct",
+      dataType: "json",
+      success: function(result) {
+        list = result;
+        pagingList(page, list);
+      },
+      error: function() {
+        alert('/addProduct 통신 실패!');
+      }
+    });
+  });
+  function getProductImage(product) {
+    return `/img/상품사진/product${product.pnum}.jpg`; // 예: 상품 번호가 1이면 /img/products/product1.png
+  }
+
+  // 페이징 및 상품 표시 함수
+  function pagingList(page, list) {
+    const count = list.length;
+    const maxPage = Math.ceil(count / limit);
+    page = Math.min(page, maxPage);
+
+    const startRow = (page - 1) * limit;
+    const endRow = Math.min(page * limit, count);
+
+    let output = "";
+    for (let i = startRow; i < endRow; i++) {
+      const product = list[i];
+      const imageUrl = getProductImage(product); // 상품 번호
+      // 상품 번호 조건에 따라 구분하여 출력
+      if (product.pnum >= 1 && product.pnum <= 100) {
+        // 식기 (1부터 100번까지)
+        output += `
+        <div class="col-md-3">
+  <div class="card">
+    <img src="${imageUrl}" alt="${product.pname}" class="card-img-top" style="width: 233px; height: 233px"/>
+    <div class="card-body text-center">
+      <div class="product-info">
+        <p>${product.pname}</p>
+        <p>${product.pprice}원</p>
+        <button class="addcart" data-pnum="${product.pnum}">
+          <span class="addcart__text">장바구니에 담기</span>
+          <span class="addcart__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" fill="none" class="svg">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </span>
+        </button>
+        <span class="favorite" data-pnum="${product.pnum}">
+          <i class="fa fa-heart" style="font-size: 24px; color: grey;"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+      `;
+      } else if (product.pnum >= 101 && product.pnum <= 200) {
+        // 재료 (101부터 200번까지)
+        output += `
+        <div class="col-md-3">
+          <div class="card">
+            <img src="${imageUrl}" alt="${product.pname}" class="card-img-top"  style="width: 300px; height: 300px"/> <!-- 상품 번호 기반 이미지 경로 -->
+            <div class="card-body text-center">
+              <div class="product-info">
+                <p>${product.pname}</p>
+                <p>${product.pprice}원</p>
+                <button class="addcart" data-pnum="${product.pnum}">
+                <span class="addcart__text">장바구니에 담기</span>
+                <span class="addcart__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+</button>
+                <span class="favorite" data-pnum="${product.pnum}">
+          <i class="fa fa-heart" style="font-size: 24px; color: grey;"></i>
+        </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      }
+    }
+
+    $('#product-list').html(output);
+
+    // 페이지 번호 생성
+    let pageNum = `<a href="#" class="prev" data-page="${page - 1 < 1 ? 1 : page - 1}"> 이전 </a>`;
+    for (let i = 1; i <= maxPage; i++) {
+      pageNum += `<a href="#" class="iNum ${i === page ? 'active' : ''}" data-page="${i}"> ${i} </a>`;
+    }
+    pageNum += `<a href="#" class="next" data-page="${page + 1 > maxPage ? maxPage : page + 1}"> 다음 </a>`;
+    $('#numbering').empty();
+    $('#numbering').append(pageNum);
+    $('#numbering').html(pageNum);
+
+    // 페이지 번호 클릭 이벤트
+    $('#numbering a').click(function(e) {
+      e.preventDefault();
+      page = parseInt($(this).data('page'));
+      pagingList(page, list);
+    });
+  }
+  // 장바구니에 추가 버튼 클릭 이벤트 핸들러
+  $(document).on("click", ".addcart", function() {
+    let productNumber = $(this).data("pnum");
+    $.ajax({
+      type: "POST",
+      url: `/addCart/${productNumber}`,
+      dataType: "html",
+      success: function (response) {
+        alert("상품이 장바구니에 추가되었습니다!");
+
+        const updatedCartItems = $(response).find('#cart-items').html();
+        const updatedTotalPrice = $(response).find('#total-price').text();
+        const updatedFinalPrice = $(response).find('#final-price').text();
+
+        $('#cart-items').html(updatedCartItems);
+        $('#total-price').text(updatedTotalPrice);
+        $('#final-price').text(updatedFinalPrice);
+      },
+      error: function (xhr, status, error) {
+        console.error("장바구니 추가에 실패했습니다.", xhr.responseText);
+      }
+    });
+
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    $(document).on("click", ".favorite", function () {
+      const WPNum= $(this).data("pnum");
+      const heartIcon = $(this).find('i');
+
+      // 아이콘 색상 확인 및 토글
+      if (heartIcon.css('color') === 'rgb(128, 128, 128)') { // 회색일 때
+        heartIcon.css('color', 'red'); // 빨간색으로 변경
+        $.ajax({
+          type: "POST",
+          url: `/addWish/${WPNum}`,
+          contentType: "application/json",
+          data: JSON.stringify({ WPNum: WPNum }),
+          success: function (response) {
+            alert("상품을 찜목록에 추가했습니다!");
+          },
+          error: function (xhr, status, error) {
+            console.error("찜목록 추가에 실패했습니다:", xhr.responseText);
+            alert("찜목록 추가에 실패했습니다.");
+          }
+        });
+      } else {
+        heartIcon.css('color', 'grey'); // 다시 회색으로 변경
+          let WNum = $(this).data("wnum");
+          $.ajax({
+            type: "POST",
+            url: `/deleteWish/${WNum}`, // 아이템 제거를 위한 서버 URL
+            contentType: 'application/json',  // JSON 형식 설정
+            success: function () {
+              alert('아이템이 찜 목록에서 제거되었습니다.');
+              location.reload();  // 목록 갱신 (페이지 새로고침)
+            },
+            error: function (error) {
+              console.error("Error removing item:", error);
+            }
+          });
+      }
+    });
+  });
+
+
+</script>
+<script src="/js/dropdown.js"></script>
+
+</html>v

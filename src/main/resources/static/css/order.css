@@ -1,0 +1,57 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+.order-container {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    font-size: 24px;
+    text-align: center;
+}
+h3 {
+    font-size: 18px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.buyer-info, .shipping-info, .payment-info {
+    margin-bottom: 20px;
+}
+.payment-info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.payment-info td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.btn-primary, .btn-secondary {
+    width: 48%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.btn-primary {
+    background-color: #ff5a00;
+    color: #fff;
+}
+.btn-secondary {
+    background-color: #007bff;
+    color: #fff;
+}

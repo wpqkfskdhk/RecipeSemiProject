@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Delicious - Food Blog Template | Recipe Post</title>
+    <link rel="icon" href="/img/core-img/favicon.ico">
+    <link rel="stylesheet" href="/css/rstyle.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<!-- 프리로더 -->
+<div id="preloader">
+    <i class="circle-preloader"></i>
+    <img src="/img/core-img/salad.png" alt="">
+</div>
+
+<!-- 헤더 영역 -->
+<header class="header-area">
+    <div th:replace="~{header.html}"></div>
+</header>
+
+<!-- 빵 부스러기 영역 시작 -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url('/img/bg-img/breadcumb3.jpg');">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <div class="breadcumb-text text-center">
+                    <h2>레시피</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 레시피 내용 시작 -->
+<div class="receipe-post-area section-padding-80">
+    <div class="container">
+        <div class="row">
+            <!-- 왼쪽: 레시피 이미지 -->
+            <div class="col-12 col-lg-6 recipe-item recipe-item-center">
+                <img alt="레시피 이미지" class="img-fluid" id="recipeImage" src="/images/default.jpg">
+                <span class="like" id="likeButton"><i class="fa fa-heart" style="font-size: 24px; color: grey;"></i></span>
+            </div>
+
+            <!-- 오른쪽: 레시피 세부 정보 -->
+            <div class="col-12 col-lg-6 recipe-content-area py-5">
+                <h2 id="recipeTitle" class="display-4 text-uppercase font-weight-bold text-dark">토마토 브루스케타</h2>
+                <div class="recipe-meta text-muted">
+                    <span id="recipeCookTime">조리 시간: 20분</span> |
+                    <span id="recipeDifficulty">난이도: 쉬움</span>
+                </div>
+                <p id="recipeDescription" class="lead text-muted mt-2">맛있는 건강 레시피로, 재료는 간단하지만 풍미가 깊습니다.</p>
+                <div class="video-container mt-4">
+                    <iframe id="recipeVideo" width="100%" height="315" src="" title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 레시피 내용 영역 -->
+    <div class="receipe-content-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="font-weight-bold">조리법</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="single-preparation-step d-flex">
+                        <div id="recipeInstructions" class="pl-4">
+                            <!-- 조리법은 동적으로 채워집니다 -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <div class="ingredients">
+                        <h4 class="font-weight-bold">재료</h4>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1">
+                            <div id="recipeIngredients">
+                                <!-- 재료는 AJAX로 동적으로 표시됩니다 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 푸터 영역 -->
+    <footer class="footer-area">
+        <div th:replace="~{footer.html}"></div>
+    </footer>
+</div>
+
+<!-- 자바스크립트 파일들 -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<script src="/js/bootstrap/popper.min.js"></script>
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/plugins/plugins.js"></script>
+<script src="/js/active.js"></script>
+
+<script>
+    $(document).ready(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipeId = urlParams.get('recipeId');
+
+        if (!recipeId) {
+            alert("레시피 ID가 없습니다.");
+            return;
+        }
+
+        $.ajax({
+            url: `/recipe/details/${recipeId}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (result) {
+                if (result) {
+                    $('#recipeTitle').text(result.rtitle);
+                    $('#recipeCookTime').text(`조리 시간: ${result.rcookTime}분`);
+                    $('#recipeDescription').text(result.rdescription);
+
+                    const imagePath = result.rimageFileName ? `/images/${result.rimageFileName}` : '/images/default-image.jpg';
+                    $('#recipeImage').attr('src', imagePath);
+
+                    let ingredientsHtml = '';
+                    result.ringredient.split(',').forEach(ingredient => {
+                        ingredientsHtml += `
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="ingredient-${ingredient}">
+                                    <label class="custom-control-label" for="ingredient-${ingredient}">${ingredient}</label>
+                                </div>
+                            `;
+                    });
+                    $('#recipeIngredients').html(ingredientsHtml);
+
+                    let instructionsHtml = '';
+                    result.rinstructions.split('\n').forEach((step, index) => {
+                        instructionsHtml += `
+                                <div class="single-preparation-step d-flex">
+                                    <h4>${index + 1}.</h4>
+                                    <p>${step}</p>
+                                </div>
+                            `;
+                    });
+                    $('#recipeInstructions').html(instructionsHtml);
+
+                    // 동적으로 'data-rnum' 속성에 recipeId를 추가
+                    $('#likeButton').data('rnum', recipeId);
+
+                    $.getJSON('/static/youtubelinks.json', function (data) {
+                        const youtubeLink = data[recipeId];
+                        if (youtubeLink) {
+                            $('#recipeVideo').attr('src', youtubeLink);
+                        } else {
+                            $('#recipeVideo').hide();
+                        }
+                    });
+                } else {
+                    alert("서버에서 받은 레시피 정보가 유효하지 않습니다.");
+                }
+            },
+            error: function () {
+                alert("레시피 세부 정보를 불러오는 데 실패했습니다.");
+            }
+        });
+
+        // 좋아요 버튼 클릭 시
+        $(document).on("click", ".like", function () {
+            const WRNum = $(this).data("rnum");  // 동적으로 할당된 'rnum' 값 가져오기
+            const heartIcon = $(this).find('i');
+
+            if (typeof WRNum === "undefined") {
+                alert("레시피 번호가 정의되지 않았습니다.");
+                return;
+            }
+
+            // 하트 아이콘 색상을 회색에서 빨간색으로 변경하며 찜 목록에 추가
+            if (heartIcon.css('color') === 'rgb(128, 128, 128)') {
+                heartIcon.css('color', 'red');
+                $.ajax({
+                    type: "POST",
+                    url: `/addWish/Recipe/${WRNum}`,  // 찜 목록에 추가하는 URL
+                    contentType: "application/json",
+                    data: JSON.stringify({ WRNum: WRNum }),  // JSON 데이터 전송
+                    success: function () {
+                        alert("상품을 찜 목록에 추가했습니다!");
+                    },
+                    error: function () {
+                        alert("찜 목록 추가에 실패했습니다.");
+                    }
+                });
+            }
+            // 하트 아이콘 색상을 빨간색에서 회색으로 변경하며 찜 목록에서 삭제
+            else {
+                heartIcon.css('color', 'grey');
+                $.ajax({
+                    type: "POST",
+                    url: `/deleteWish/${WNum}`,  // 찜 목록에서 삭제하는 URL
+                    success: function () {
+                        alert("찜 목록에서 상품을 삭제했습니다.");
+                    },
+                    error: function () {
+                        alert("찜 목록에서 삭제에 실패했습니다.");
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script src="/js/dropdown.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+/* 페이지 배경 및 기본 스타일 */
+body {
+    background-image: url('../images/recipebg.jpg'); /* 배경 경로 수정 */
+    background-size: cover; /* 이미지가 전체 배경을 덮도록 설정 */
+    background-repeat: no-repeat; /* 이미지가 반복되지 않도록 설정 */
+    background-position: center; /* 이미지가 중앙에 오도록 설정 */
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* 메인 컨테이너 */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 수직 중앙 정렬 */
+    height: 100vh; /* 뷰포트 전체 높이 사용 */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+
+/* 왼쪽 컨테이너 */
+.left-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px; /* 안쪽 컨테이너의 테두리 반경 */
+    padding: 30px;
+    height: 80vh;
+    width: 80%; /* 내부 콘텐츠가 테두리에 가까워지도록 너비 조정 */
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 프로필 및 상세보기 칼럼 */
+.profile-column, .details-column {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* 투명한 흰색 배경 */
+    color: #333;
+}
+
+.profile-column {
+    width: 30%;
+    text-align: center;
+    border-right: none;
+    margin-right: 20px;
+}
+
+.details-column {
+    width: 70%;
+}
+
+/* 프로필 이미지 */
+.profile-img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 5px solid #f9a602; /* 따뜻한 노란색 테두리 */
+    object-fit: cover;
+}
+
+.profile-name {
+    margin-top: 15px;
+    font-size: 24px;
+    color: #f57c00; /* 밝은 주황색 */
+    font-weight: bold;
+}
+
+/* 상세보기 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.9); /* 투명한 흰색 배경 */
+    border-radius: 10px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05); /* 테두리 그림자 */
+}
+
+th, td {
+    padding: 16px;
+    font-size: 18px; /* 텍스트 크기 확대 */
+    color: #333;
+    border: 0.8px solid #f0f0f0; /* 더 얇고 밝은 회색 테두리 */
+}
+
+th {
+    background-color: #ffe0b2; /* 밝은 오렌지색 배경 */
+    font-weight: bold;
+    text-align: left;
+    width: 35%;
+}
+
+td {
+    background-color: #fffbf2; /* 밝은 크림색 */
+    width: 65%;
+}
+
+/* 버튼 스타일 */
+#modify, #delete {
+    padding: 12px 24px;
+    font-size: 18px;
+    margin: 0 5px;
+    cursor: pointer;
+    background-color: #f57c00; /* 밝은 주황색 */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15); /* 버튼 그림자 추가 */
+}
+
+#modify:hover, #delete:hover {
+    background-color: #ff9800; /* 더 밝은 주황색 */
+}
+
+/* 버튼을 포함한 셀 가운데 정렬 */
+th[colspan="2"] {
+    text-align: center;
+    border: none;
+    background-color: transparent;
+}

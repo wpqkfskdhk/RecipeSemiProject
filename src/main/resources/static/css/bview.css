@@ -1,0 +1,136 @@
+/* 전체 배경 스타일 - 배경 이미지 설정 */
+body {
+    background-image: url('../img/bg-img/recipebg.jpg'); /* 배경 경로 수정 */
+    background-size: cover; /* 이미지가 전체 배경을 덮도록 설정 */
+    background-repeat: no-repeat; /* 이미지가 반복되지 않도록 설정 */
+    background-position: center; /* 이미지가 중앙에 오도록 설정 */
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    min-height: 50vh; /* 최소 높이를 화면 전체로 설정 */
+    text-align: center; /* 모든 텍스트를 가운데 정렬 */
+    flex-direction: column; /* 제목과 폼이 세로로 나열되도록 설정 */
+
+}
+
+/* 전체 컨테이너 스타일 */
+#modiForm1, #modiForm2 {
+    background-color: white;
+    border-radius: 10px; /* 둥근 모서리 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    width: 80%;
+    max-width: 900px; /* 최대 너비 900px */
+    padding: 30px;
+    margin: 10px;
+    box-sizing: border-box; /* 여백과 패딩이 포함된 너비 설정 */
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 16px;
+}
+
+/* 테이블 헤더 스타일 */
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* 캡션 스타일 */
+caption {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50; /* 녹색으로 제목 강조 */
+    margin-bottom: 20px;
+}
+
+/* 버튼 스타일 */
+button {
+    background-color: #4CAF50; /* 녹색 버튼 */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049; /* 버튼 호버 시 색상 변경 */
+}
+
+/* 댓글 입력 박스 */
+#cmtWrite textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* 댓글 목록 스타일 */
+#cmtArea {
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* 댓글 테이블 스타일 */
+#cmtArea table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#cmtArea th, #cmtArea td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+/* 입력 필드 및 파일업로드 스타일 */
+input[type="text"], input[type="file"], textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* 이미지 미리보기 스타일 */
+#preImage {
+    margin-top: 10px;
+    max-width: 150px;
+    display: block;
+}
+
+/* 댓글 수정/삭제 버튼 스타일 */
+.cmodify, .cdelete {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+
+.cmodify:hover, .cdelete:hover {
+    background-color: #f57c00; /* 호버 시 색상 변경 */
+}

@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="/css/mview.css">
+  <title>JPA회원목록</title>
+</head>
+
+<body>
+<table>
+  <caption>회원목록</caption>
+
+  <tr>
+    <th>아이디</th>
+    <th>이름</th>
+    <th>성별</th>
+    <th>생년월일</th>
+  </tr>
+
+  <tr th:each="list : ${memberList}">
+    <td><a th:href="@{|/mView/${list.mId}|}">[[${list.mId}]]</a></td>
+    <td>[[${list.mName}]]</td>
+    <td>[[${list.mGender}]]</td>
+    <td>[[${list.mBirth}]]</td>
+  </tr>
+
+</table>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script>
+
+</script>
+
+</html>

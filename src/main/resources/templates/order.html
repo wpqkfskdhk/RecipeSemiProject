@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주문/결제</title>
+  <link rel="stylesheet" href="css/order.css">
+</head>
+<body>
+<div class="order-container">
+  <header>
+    <img src="/img/core-img/logo.png" alt="logo" width="100px">
+    <h1>주문/결제</h1>
+  </header>
+
+  <!-- 구매자 정보 -->
+  <section class="buyer-info">
+    <h3>구매자 정보</h3>
+    <div>
+      <label>이름</label>
+      <span id="orderReceiver"></span>
+    </div>
+    <div>
+      <label>휴대폰 번호</label>
+      <span id="orderPhone"></span>
+    </div>
+    <div>
+      <label>주소</label>
+      <span id="orderAddress"></span>
+    </div>
+  </section>
+
+  <!-- 결제 정보 -->
+  <section class="payment-info">
+    <h3>결제 정보</h3>
+    <table>
+      <tr>
+        <td>총 상품 가격</td>
+        <td id="totalPrice">0원</td>
+      </tr>
+      <tr>
+        <td>배송비</td>
+        <td id="shippingCost">3000원</td> <!-- 고정 배송비 -->
+      </tr>
+      <tr>
+        <td>총 결제 금액</td>
+        <td id="finalPrice">0원</td>
+      </tr>
+    </table>
+
+    <!-- 결제 수단 선택 -->
+    <h4>결제 수단</h4>
+    <div class="payment-methods">
+      <label><input type="radio" name="payment" value="카드"> 신용카드</label>
+    </div>
+  </section>
+
+  <!-- 결제 버튼 -->
+  <div class="button-container">
+    <button type="button" class="btn-secondary" onclick="pay()">결제하기</button>
+  </div>
+</div>
+
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<script src="/js/pay.js"></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script>
+  $(document).ready(function() {
+    // 서버에서 주문 정보 가져오기
+    $.ajax({
+      url: "/orderDetail",
+      type: "POST",
+      dataType: "json",
+      success: function (data) {
+        if (data.length > 0) {
+          let totalPrice = 0; // 상품 가격 합산
+          let totalQuantity = 0; // 상품 수량 합산
+          const shippingCost = 3000; // 고정 배송비 설정
+
+          // 각 상품의 가격과 수량을 합산
+          data.forEach(order => {
+            // 구매자 정보 표시
+            $("#orderReceiver").text(`${order.oreceiver}`);
+            $("#orderPhone").text(`${order.ophone}`);
+            $("#orderAddress").text(`${order.oaddr}`);
+            // 상품 가격 합산 (각 상품의 단가만 더함)
+            totalPrice += parseInt(order.oamount, 10);
+
+            // 수량 합산
+            totalQuantity += parseInt(order.quantity, 10);
+          });
+
+          // 각 상품의 가격에 수량을 곱한 최종 가격 계산
+          const totalItemPrice = totalPrice
+
+          // 상품 가격을 표시 (각 상품의 단가만 합산)
+          $("#totalPrice").text(totalItemPrice + "원");
+          // 최종 결제 금액은 상품 가격 + 배송비
+          $("#finalPrice").text((totalItemPrice + shippingCost) + "원");
+        } else {
+          console.log("데이터가 없습니다.");
+        }
+      },
+      error: function () {
+        alert("주문 정보를 불러오는 데 실패했습니다.");
+      }
+    });
+  });
+
+</script>
+</body>
+</html>

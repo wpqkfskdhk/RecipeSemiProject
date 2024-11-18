@@ -1,0 +1,278 @@
+/* Container for the entire cart */
+.cart-container {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+.empty-cart-message {
+    display: flex;
+    justify-content: center;  /* 가로 방향 중앙 정렬 */
+    align-items: center;      /* 세로 방향 중앙 정렬 */
+    height: 200px;            /* 메시지를 중앙에 배치할 공간 설정 (필요에 따라 높이를 조절) */
+    text-align: center;       /* 텍스트를 중앙 정렬 */
+}
+/* Header section with category tabs */
+.cart-header {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #fafafa;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    font-size: 1.1em;
+}
+
+/* Individual cart item container */
+.cart-item {
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+    background-color: #fff;
+}
+
+.product-image {
+    width: 80px;
+    height: auto;
+    margin-right: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+/* Product details next to the image */
+.product-details {
+    flex-grow: 1;
+}
+
+.product-details h3 {
+    font-size: 1em;
+    color: #333;
+    margin: 0 0 8px;
+}
+
+.delivery-info {
+    color: #36a420;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.price-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.discount {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 0.9em;
+}
+
+.price {
+    font-weight: bold;
+    color: #ff5757;
+    font-size: 1.2em;
+}
+
+.points {
+    color: #ff9800;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+/* Quantity controls */
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.decrease, .increase {
+    background-color: #f0f0f0;
+    border: none;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2em;
+    color: #333;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.decrease:hover, .increase:hover {
+    background-color: #e0e0e0;
+}
+
+.quantity-value {
+    font-size: 1em;
+    color: #333;
+}
+
+/* Footer section with options and summary */
+.cart-footer {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fafafa;
+    border-top: 1px solid #ddd;
+}
+
+.select-options {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.select-options input[type="checkbox"] {
+    margin-right: 5px;
+    accent-color: #36a420;
+}
+
+.summary {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    width: 100%
+}
+
+.summary-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.summary-item span:last-child {
+    font-weight: bold;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #e0e0e0;
+    margin: 15px 0;
+}
+
+.final-price-container {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.purchase-button {
+    width: 100%;
+    padding: 12px 0;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.purchase-button:hover {
+    background-color: #0056b3;
+}
+
+/* Benefit section at the bottom */
+.benefit {
+    padding: 15px;
+    background-color: #f7f7f7;
+    color: #666;
+    font-size: 0.9em;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+.benefit p {
+    margin: 5px 0;
+}
+
+/* Back to cart styling */
+.back-to-cart {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    gap: 5px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.back-arrow {
+    font-size: 1.5em;
+    color: #007bff;
+}
+
+.cart-text {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* General styles */
+h3, p, span {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* Right section adjustment for wider summary */
+.right-section {
+    flex: 2;
+    padding: 20px;
+}
+
+/* Styling for delete buttons in select-options */
+.select-options button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    color: #333;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.select-options button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Quantity button styling */
+.quantity button {
+    background-color: #f0f0f0;
+    border: none;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2em;
+    color: #333;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.quantity button:hover {
+    background-color: #e0e0e0;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/bwrite.css">
+    <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+
+    <title>회원게시글작성</title>
+</head>
+
+<body>
+<h2>게시글 작성 페이지</h2>
+
+<form action="/blogWrite" method="post" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <th>제목</th>
+            <td><input type="text" name="UBTitle"/></td>
+        </tr>
+
+        <tr>
+            <th>내용</th>
+            <td>
+                <textarea name="UBContent" rows="20" cols="40"></textarea>
+            </td>
+        </tr>
+
+        <tr>
+            <th>첨부파일</th>
+            <td>
+                <input type="file" id="UBFile" name="UBFile"/>
+                <br/> <img id="preImage" width="150px"/>
+            </td>
+        </tr>
+
+        <tr>
+            <th colspan="2">
+                <input type="hidden" name="UBWriter" th:value="${session.loginId}"/>
+                <input type="submit" value="작성"/>
+                <input type="reset" value="초기화"/>
+            </th>
+        </tr>
+    </table>
+</form>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+
+<script th:if="${session.loginId eq null}">
+    $(() => {
+        alert('로그인 후 사용');
+        location.href = '/mLoginForm';
+    });
+</script>
+
+<script>
+
+    $('#UBFile').on('change', function (event) {
+        let file = event.target.files[0];
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#preImage').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(file);
+    });
+</script>
+
+</html>

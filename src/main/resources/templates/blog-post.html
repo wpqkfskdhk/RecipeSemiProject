@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>회원 레시피 게시판</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/img/core-img/favicon.ico">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+<!-- Preloader -->
+<div id="preloader">
+    <i class="circle-preloader"></i>
+    <img src="/img/core-img/salad.png" alt="">
+</div>
+
+
+<!-- ##### Header Area Start ##### -->
+<header class="header-area">
+    <div th:replace="~{header.html}"></div>
+</header>
+<!-- ##### Header Area End ##### -->
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url('/img/bg-img/breadcumb2.jpg');">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <div class="breadcumb-text text-center">
+                    <h2>회원레시피게시판</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+
+<!-- Blog Area Start -->
+<div class="blog-area section-padding-80">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar Area (Left Empty Space 활용) -->
+            <div class="col-12 col-lg-4">
+                <div class="sidebar-area">
+                    <h4>게시글 필터</h4>
+                    <!-- Category Filter -->
+                    <div class="filter">
+                        <label for="selectCategory"></label>
+                        <select id="selectCategory">
+                            <option value="">카테고리</option>
+                            <option value="UBWriter">작성자</option>
+                            <option value="UBTitle">제목</option>
+                            <option value="UBContent">내용</option>
+                        </select>
+                    </div>
+                    <br/>
+                    <!-- Other Filter Options -->
+                    <div class="filter mt-4">
+                        <h5 for="searchKeyword">키워드 검색</h5>
+                        <input type="search" id="searchKeyword" placeholder="Search Recipes">
+                        <button class="btn delicious-btn mt-2" id="searchBtn">검색</button>
+                    </div>
+                    <!-- 글쓰기 버튼 -->
+                    <input id="blog-write" type="button" class="btn delicious-btn mt-30" value="글쓰기">
+                </div>
+            </div>
+
+            <!-- Blog Posts Area -->
+            <div class="col-12 col-lg-8">
+                <div class="blog-posts-area">
+                    <!-- 게시글 카드 컨테이너 -->
+                    <div id="postContainer" class="post-container row">
+                        <!-- 게시글 카드들이 여기에 로드됩니다 -->
+                    </div>
+                    <!-- 페이징 버튼 -->
+                    <div id="pagination" class="pagination mt-4 text-center">
+                        <!-- 페이지 번호 버튼들이 여기에 로드됩니다 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Blog Area End -->
+
+
+
+    <!-- ##### Footer Area Start ##### -->
+    <footer class="footer-area">
+        <footer class="footer-area">
+            <div th:replace="~{footer.html}"></div>
+        </footer>
+    </footer>
+    <!-- ##### Footer Area Start ##### -->
+</body>
+<!-- ##### All Javascript Files ##### -->
+<!-- jQuery-2.2.4 js -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="/js/bootstrap/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<!-- All Plugins js -->
+<script src="/js/plugins/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+
+<script src="/js/dropdown.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // 글쓰기 버튼 클릭 시 blog-write.html로 이동
+        $('#blog-write').click(function () {
+            window.location.href = '/blog-write';  // '/blog-write' 경로로 이동
+        });
+
+        let list = [];
+        let page = 1;        // 페이지 번호
+        let limit = 6;       // 한 페이지에 출력될 데이터 갯수
+        const block = 6;     // 한 페이지에 출력될 페이지 갯수
+        let count = 0;       // 전체 데이터 갯수
+        let searchCategory = '';  // 검색 카테고리
+        let searchKeyword = '';   // 검색 키워드
+
+        // 페이지 로딩 후 ajax로 게시글 불러오기
+        loadPosts();
+
+        /*// 검색 기능 추가
+        $('#searchBtn').click(function () {
+            searchCategory = $('#searchCategory').val();  // 예: "BTitle"
+            searchKeyword = $('#searchKeyword').val();    // 예: 검색어
+            page = 1; // 검색 시 페이지를 첫 페이지로 초기화
+            loadPosts();  // 검색 조건에 맞게 게시글 다시 불러오기
+        });*/
+
+        // 게시글 불러오기 함수
+        function loadPosts() {
+            $.ajax({
+                type: "POST",
+                url: "/blogpostList",  // 게시글 목록을 가져오는 API 호출
+                data: JSON.stringify({
+                    category: searchCategory,
+                    keyword: searchKeyword,
+                    page: page,
+                    limit: limit
+                }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (result) {
+                    list = result;  // 서버에서 반환된 게시글 리스트
+                    count = result.length;  // 전체 게시글 갯수
+                    pagingList(page, list);  // 페이징 처리 및 게시글 출력
+                },
+                error: function () {
+                    alert('게시글 목록 불러오기 실패!');
+                }
+            });
+        }
+
+        // 페이지 클릭 시 해당 페이지로 이동
+        $('#pagination').on('click', '.page-link', function (event) {
+            event.preventDefault();
+            let selectedPage = $(this).text();
+
+            if (selectedPage === "이전") {
+                page = Math.max(page - 1, 1);
+            } else if (selectedPage === "다음") {
+                page = Math.min(page + 1, maxPage);
+            } else {
+                page = parseInt(selectedPage);
+            }
+
+            loadPosts();  // 페이지 변경 시 게시글 다시 불러오기
+        });
+
+        // 페이징 처리 함수
+        function pagingList(page, list) {
+            if (list.length > 0) {
+                let maxPage = Math.ceil(count / limit);  // 최대 페이지 수
+                if (page > maxPage) page = maxPage;
+
+                let startRow = (page - 1) * limit;
+                let endRow = Math.min(startRow + limit, count);
+
+                let startPage = Math.floor((page - 1) / block) * block + 1;
+                let endPage = Math.min(startPage + block - 1, maxPage);
+
+                let output = "";
+                for (let i = startRow; i < endRow; i++) {
+                    const post = list[i];
+                    const imageUrl = post.ubfileName ?`/userupload/${post.ubfileName}` : '/images/default.jpg';
+                    output += `
+                <div class="post-card">
+                    <a href="/uBView/${post.ubnum}">
+                        <img src="${imageUrl}" onerror="this.src='/images/default.jpg'" alt="Post Image">
+                    </a>
+                    <div class="post-info">
+                        <a href="/uBView/${post.ubnum}" class="post-title">${post.ubtitle}</a>
+                        <div class="post-meta">
+                            <p>작성자: ${post.ubwriter}</p>
+                            <p>작성일: ${post.ubdate.substring(0, 10)}</p>
+                            <p>조회수: ${post.ubhit}</p>
+                        </div>
+                    </div>
+                </div>`;
+                }
+
+                $('#postContainer').empty().append(output);
+                paginate(maxPage, startPage, endPage);
+            } else {
+                $('#postContainer').html('<p>게시글이 없습니다.</p>');
+            }
+        }
+
+        // 페이지네이션 처리 함수
+        function paginate(maxPage, startPage, endPage) {
+            let paginationOutput = '';
+
+            // 이전 페이지
+            if (startPage > 1) {
+                paginationOutput += `<li class="page-item"><a class="page-link" href="#">이전</a></li>`;
+            }
+
+            // 페이지 번호 출력
+            for (let i = startPage; i <= endPage; i++) {
+                paginationOutput += `<li class="page-item ${i === page ? 'active' : ''}">
+            <a class="page-link" href="#">${i}</a></li>`;
+            }
+
+            // 다음 페이지
+            if (endPage < maxPage) {
+                paginationOutput += `<li class="page-item"><a class="page-link" href="#">다음</a></li>`;
+            }
+
+            $('#pagination').empty().append(paginationOutput);
+        }
+
+        // 게시글 갯수 변경
+        $('#limit').change(function () {
+            page = 1;
+            limit = parseInt($('#limit').val());
+            loadPosts();  // 갯수 변경 시 게시글 다시 불러오기
+        });
+    });
+
+
+
+
+</script>
+</html>

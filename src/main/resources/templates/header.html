@@ -1,0 +1,84 @@
+<!-- Header Area -->
+<div class="top-header-area">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-between">
+            <div class="col-12 col-sm-6">
+                <div class="breaking-news">
+                    <div id="breakingNewsTicker" class="ticker">
+                        <ul>
+                            <li><a href="#">Hello 흑미백미</a></li>
+                            <li><a href="#">Welcome to 흑味백味</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6">
+                <div th:if="${session.loginId == null}">
+                    <div class="top-social-info text-right">
+                        <span id="join">회원가입</span>
+                        <span id="login">로그인</span>
+                    </div>
+                </div>
+                <div th:if="${session.loginId != null}">
+                    <div class="top-social-info text-right">
+                        <div class="profile-container">
+                            <!-- 프로필 이미지 -->
+                            <img th:src="@{|/profile/${session.loginProfile}|}" alt="" class="img-fluid rounded-circle profile-image" width="30px">
+
+                            <!-- 마이페이지 텍스트 링크 -->
+                            <span id="myPageText" class="my-page-text">마이페이지</span>
+
+                            <!-- 드롭다운 메뉴 -->
+                            <div class="dropdown-menu" id="profile-dropdown">
+                                <a th:href="@{/mView/{MId}(MId=${session.loginId})}">내정보</a>
+                                <a href="/wish">찜목록</a>
+                                <a href="/cart"><img src="/img/core-img/cart.png" alt="" width="50px" height="30px"> 장바구니</a>
+                                <a href="/mLogout">로그아웃</a>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<!-- Navbar Area -->
+<div class="delicious-main-menu">
+    <div class="classy-nav-container breakpoint-off">
+        <div class="container">
+            <!-- Menu -->
+            <nav class="classy-navbar justify-content-between" id="deliciousNav">
+
+                <!-- Logo -->
+                <a id="logo" class="nav-brand" href="/index"><img src="/img/core-img/logo.png" alt="" width="100px" height="100px"></a>
+
+                <!-- Navbar Toggler -->
+                <div class="classy-navbar-toggler">
+                    <span class="navbarToggler"><span></span><span></span><span></span></span>
+                </div>
+
+                <!-- Menu -->
+                <div class="classy-menu">
+
+                    <!-- close btn -->
+                    <div class="classycloseIcon">
+                        <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                    </div>
+
+                    <!-- Nav Start -->
+                    <div class="classynav">
+                        <ul>
+                            <li><a href="/product">상품</a></li>
+                            <li><a href="/blogpost">회원레시피게시판</a>
+                            <li><a href="/receipe-post" id="bRecipe">레시피</a></li>
+                            <li><a href="/bList">문의</a></li>
+                        </ul>
+                    </div>
+                    <!-- Nav End -->
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+

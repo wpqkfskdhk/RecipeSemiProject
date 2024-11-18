@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="/style.css">
+    <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+
+    <title>회원게시글상세보기</title>
+</head>
+
+<body>
+<!-- Preloader -->
+<div id="preloader">
+    <i class="circle-preloader"></i>
+    <img src="/img/core-img/salad.png" alt="">
+</div>
+
+<!-- Search Wrapper -->
+<div class="search-wrapper">
+    <!-- Close Btn -->
+    <div class="close-btn"><i class="fa fa-times" aria-hidden="true"></i></div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form action="#" method="post">
+                    <input type="search" name="search" placeholder="Type any keywords...">
+                    <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ##### Header Area Start ##### -->
+<header class="header-area">
+    <!-- Header Area -->
+    <div th:replace="~{header.html}"></div>
+</header>
+<!-- ##### Header Area End ##### -->
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url('/img/bg-img/breadcumb3.jpg');">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <div class="breadcumb-text text-center">
+                    <h2>회원게시글 상세보기</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+<style>
+    /* 전체 레이아웃 */
+    #userModiForm1, #userModiForm2 {
+        max-width: 700px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-family: Arial, sans-serif;
+        background-color: #fafafa;
+    }
+
+    /* 게시글 정보 스타일 */
+    .post-info {
+        color: #888;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    /* 제목 스타일 */
+    .post-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    /* 내용 스타일 */
+    .post-content {
+        font-size: 16px;
+        color: #444;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    /* 첨부파일 스타일 */
+    .attachment img {
+        width: 100%;
+        max-width: 200px;
+        margin-top: 10px;
+        border-radius: 4px;
+    }
+
+    /* 버튼 스타일 - 밝은 초록색 */
+    .btn {
+        margin: 5px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    /* 댓글 작성 및 댓글 목록 영역 */
+    #uCmtWrite, #uCmtArea {
+        margin-top: 20px;
+        padding: 15px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    /* 댓글 작성 텍스트 영역 */
+    textarea {
+        width: 100%;
+        resize: vertical;
+        border-radius: 4px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+</style>
+<!-- 게시글 상세보기 -->
+<div id="userModiForm1">
+    <div class="post-info">
+        <span><strong>작성자:</strong> [[${uBView.UBWriter}]]</span> |
+        <span><strong>작성일:</strong> [[${uBView.UBDate}]]</span> |
+        <span><strong>조회수:</strong> [[${uBView.UBHit}]]</span>
+    </div>
+
+    <div class="post-title">[[${uBView.UBTitle}]]</div>
+
+    <div class="post-content">[[${uBView.UBContent}]]</div>
+
+    <div class="attachment">
+        <br/><img th:src="@{|/userupload/${uBView.UBFileName}|}"/>
+        <br/><br/><strong>첨부파일:</strong>
+        <br/>[[${uBView.UBFileName}]]
+    </div>
+
+    <div style="text-align: right;">
+        <button id="modify" class="btn">수정</button>
+        <button id="delete" class="btn">삭제</button>
+    </div>
+
+</div>
+
+<!-- 게시글 수정 페이지 -->
+<div id="userModiForm2">
+    <h2>게시글 수정 페이지</h2>
+    <form action="/uBModify" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="UBTitle"><strong>제목</strong></label>
+            <input type="text" id="UBTitle" name="UBTitle" th:placeholder="${uBView.UBTitle}" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ddd;"/>
+        </div>
+        <div style="margin-top: 15px;">
+            <label for="UBContent"><strong>내용</strong></label>
+            <textarea id="UBContent" name="UBContent" rows="10" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ddd;">[[${uBView.UBContent}]]</textarea>
+        </div>
+        <div style="margin-top: 15px;">
+            <label for="UBFile"><strong>첨부파일</strong></label>
+            <input type="file" id="UBFile" name="UBFile"/>
+            <input type="hidden" name="UBFileName" th:value="${uBView.UBFileName}"/>
+            <br/><img id="preImage" width="150px" th:src="@{|/userupload/${uBView.UBFileName}|}" style="margin-top: 10px;"/>
+        </div>
+        <div style="text-align: right; margin-top: 15px;">
+            <input type="hidden" name="UBNum" th:value="${uBView.UBNum}"/>
+            <input type="hidden" name="UBWriter" th:value="${uBView.UBWriter}"/>
+            <input type="submit" class="btn" value="수정"/>
+        </div>
+    </form>
+</div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<footer class="footer-area">
+    <div class="container h-100">
+        <div class="row h-100">
+            <div class="col-12 h-100 d-flex flex-wrap align-items-center justify-content-between">
+                <!-- Footer Social Info -->
+                <div class="footer-social-info text-right">
+                    <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                </div>
+                <!-- Footer Logo -->
+                <div class="footer-logo">
+                    <a href="index.html"><img src="/img/core-img/logo.png" alt width="100px" height="100px"></a>
+                </div>
+                <!-- Copywrite -->
+                <!--<p>&lt;!&ndash; Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. &ndash;&gt;
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    &lt;!&ndash; Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. &ndash;&gt;</p>-->
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+
+<!-- ##### All Javascript Files ##### -->
+<!-- jQuery-2.2.4 js -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="/js/bootstrap/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<!-- All Plugins js -->
+<script src="/js/plugins/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+
+<!--<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>-->
+<script>
+
+
+
+        $('#userModiForm2').hide();
+
+        $('#modify').click(() => {
+            $('#userModiForm2').show();
+            $('#userModiForm1').hide();
+        });
+
+        $('#delete').click(() => {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                location.href = `/uBDelete?uBNum=[[${uBView.UBNum}]]&bFileName=[[${uBView.UBFileName}]]`;
+            }
+        });
+
+        $('#UBFile').on('change', function (event) {
+            let file = event.target.files[0];
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#preImage').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+        });
+</script>
+
+</html>

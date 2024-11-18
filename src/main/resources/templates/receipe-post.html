@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Delicious - Food Blog Template | Receipe Post</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/img/core-img/favicon.ico">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+<!-- Preloader -->
+<div id="preloader">
+    <i class="circle-preloader"></i>
+    <img src="/img/core-img/salad.png" alt="">
+</div>
+
+
+<!-- ##### Header Area Start ##### -->
+<header class="header-area">
+    <!-- Header Area -->
+    <div th:replace="~{header.html}"></div>
+</header>
+<!-- ##### Header Area End ##### -->
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url('/img/bg-img/breadcumb3.jpg');">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <div class="breadcumb-text text-center">
+                    <h2>레시피</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+
+<div class="receipe-post-area section-padding-80">
+    <!-- Receipe Post Search -->
+    <div class="receipe-post-search mb-80">
+        <div class="container">
+            <form method="post">
+                <div class="row">
+                    <div class="col-12 col-lg-3">
+                        <select id="category" >
+                            <option value="RTitle">레시피이름</option>
+                            <option value="RCategory">레시피 카테고리</option>
+                            <option value="RDifficulty">난이도</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <input type="text" id="keyword" placeholder="Search Receipies">
+                    </div>
+                    <div class="col-12 col-lg-3 text-right">
+                        <button id="searchBtn" class="btn delicious-btn">검색</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Receipe Content Area -->
+    <div class="receipe-content-area">
+        <div class="container">
+
+            <div class="row" id="receipeList">
+
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="receipe-ratings text-right my-5">
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-lg-8">
+
+                </div>
+
+                <!-- Ingredients -->
+                <div class="col-12 col-lg-4">
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading text-left">
+
+                    </div>
+                </div>
+            </div>
+<!-- ##### Follow Us Instagram Area Start ##### -->
+<div class="follow-us-instagram">
+
+
+</div>
+<!-- ##### Follow Us Instagram Area End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<footer class="footer-area">
+    <div th:replace="~{footer.html}"></div>
+</footer>
+<!-- ##### Footer Area Start ##### -->
+
+<!-- ##### All Javascript Files ##### -->
+
+<!-- jQuery-2.2.4 js -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="/js/bootstrap/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<!-- All Plugins js -->
+<script src="/js/plugins/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+<script src="/js/dropdown.js"></script>
+
+</body>
+
+<script>
+    $(document).ready(function() {
+        // 1. 레시피 목록을 서버에서 AJAX로 요청
+        $.ajax({
+            url: 'recipeList',  // 서버에 요청할 URL
+            type: 'GET',         // HTTP 메서드 (GET)
+            dataType: 'json',    // 응답 데이터 형식 (JSON)
+            success: function(result) {
+                // 2. 서버에서 받은 레시피 데이터를 HTML로 변환
+                result.forEach(recipe => {
+                    const recipeItem = `
+                <div class="recipe-item" data-recipe-id="${recipe.rnum}">
+                    <!-- 레시피 이미지 -->
+                    <img src="/images/${recipe.rimageFileName}" alt="Recipe Image" class="recipe-image" style="width: 300px; height: 300px"/>
+
+                    <!-- 추가 정보 (기본적으로 숨겨진 상태) -->
+                    <div class="hover-overlay">
+                        <div class="additional-info" style="display: none;">
+                            <p>레시피 설명: ${recipe.rdescription}</p>
+                            <p>조리 시간: ${recipe.rcookTime}분</p>
+                            <p>난이도: ${recipe.rdifficulty}</p>
+                        </div>
+                    </div>
+
+                    <!-- 레시피 제목 -->
+                    <h2>${recipe.rtitle}</h2>
+
+                    <!-- 레시피 카테고리 -->
+                    <p>${recipe.rcategory}</p>
+                </div>
+                `;
+
+                    // 3. HTML을 동적으로 페이지에 추가
+                    $('#receipeList').append(recipeItem);
+                });
+
+                // 마우스 진입 및 이탈 시 추가 정보 토글
+                $('.recipe-item').on('mouseenter', function () {
+                    $(this).find('.additional-info').fadeIn(); // 마우스 올렸을 때 표시
+                }).on('mouseleave', function () {
+                    $(this).find('.additional-info').fadeOut(); // 마우스 벗어났을 때 숨기기
+                });
+
+                // 레시피 항목 클릭 시 상세 페이지로 이동
+                $('.recipe-item').on('click', function () {
+                    const recipeId = $(this).data('recipe-id');
+                    // recipeview.html 페이지로 이동하며 recipeId를 쿼리 파라미터로 전달
+                    window.location.href = `/recipe/recipeview?recipeId=${recipeId}`;
+                });
+            },
+            error: function() {
+                alert("레시피 목록을 불러오는 데 실패했습니다.");
+            }
+        });
+    });
+    $('#searchBtn').click((event) => {
+        event.preventDefault(); // 기본 폼 동작 방지
+
+        let category = $('#category').val();
+        let keyword = $('#keyword').val();
+
+        $.ajax({
+            type: "POST",
+            url: "/rsearchList",
+            data: {
+                "category": category,
+                "keyword": keyword
+            },
+            dataType: "json",
+            success: (result) => {
+                // 기존 검색 결과 지우기
+                $('#receipeList').empty();
+
+                // 서버에서 받은 검색 결과로 HTML 업데이트
+                result.forEach(recipe => {
+                    const recipeItem = `
+                    <div class="recipe-item" data-recipe-id="${recipe.rnum}">
+                        <img src="/images/${recipe.rimageFileName}" alt="Recipe Image" class="recipe-image" style="width: 300px; height: 300px"/>
+                        <div class="hover-overlay">
+                            <div class="additional-info" style="display: none;">
+                                <p>레시피 설명: ${recipe.rdescription}</p>
+                                <p>조리 시간: ${recipe.rcookTime}분</p>
+                                <p>난이도: ${recipe.rdifficulty}</p>
+                            </div>
+                        </div>
+                        <h2>${recipe.rtitle}</h2>
+                        <p>${recipe.rcategory}</p>
+                    </div>
+                `;
+
+                    // 새로운 레시피 아이템 추가
+                    $('#receipeList').append(recipeItem);
+                });
+
+                // 마우스 진입 및 이탈 시 추가 정보 토글
+                $('.recipe-item').on('mouseenter', function () {
+                    $(this).find('.additional-info').fadeIn();
+                }).on('mouseleave', function () {
+                    $(this).find('.additional-info').fadeOut();
+                });
+
+                // 레시피 항목 클릭 시 상세 페이지로 이동
+                $('.recipe-item').on('click', function () {
+                    const recipeId = $(this).data('recipe-id');
+                    window.location.href = `/recipe/recipeview?recipeId=${recipeId}`;
+                });
+            },
+            error: () => {
+                alert('searchList 통신 실패!');
+            }
+        });
+    });
+</script>
+
+</html>

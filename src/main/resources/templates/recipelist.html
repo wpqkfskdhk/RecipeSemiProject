@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+
+    <title>레시피</title>
+</head>
+
+<body>
+<div class="receipe-content-area">
+    <div class="container">
+
+        <div class="row" id="receipeList">
+            <div class="col-12 col-md-8">
+                <div class="receipe-headline my-5">
+
+                    <div class="col-12 col-md-8">
+                        <div class="receipe-headline my-5">
+                            <div class="recipe-item" >
+                                <!-- 레시피 이미지 -->
+                                <img src="/images/${recipe.RImageFileName}" alt="Recipe Image" class="recipe-image"/>
+                                <!-- 레시피 제목 -->
+                                <h2>${recipe.RTitle}</h2>
+                                <!-- 레시피 카테고리, 조리시간, 난이도 숨겨진 상태로 보이게 할 부분 -->
+                                <div class="additional-info" style="display:none;">
+                                    <p>${recipe.RCategory}</p>
+                                    <p>${recipe.RCookTime}</p>
+                                    <p>${recipe.RDifficulty}</p>
+                                </div>
+                                <!-- 레시피 설명 (이 부분은 기본적으로 보임) -->
+                                <p>${recipe.RDescription}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script>
+
+</script>
+
+</html>

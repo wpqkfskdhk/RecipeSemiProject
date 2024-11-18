@@ -1,0 +1,125 @@
+
+body {
+    background-image: url('../img/bg-img/recipebg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* 硫붿씤 而⑦뀒�대꼫 */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* �섏쭅 以묒븰 �뺣젹 */
+    height: 100vh; /* 酉고룷�� �꾩껜 �믪씠 �ъ슜 */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+
+/* �쇱そ 而⑦뀒�대꼫 */
+.left-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px; /* �덉そ 而⑦뀒�대꼫�� �뚮몢由� 諛섍꼍 */
+    padding: 30px;
+    height: 80vh;
+    width: 80%; /* �대� 肄섑뀗痢좉� �뚮몢由ъ뿉 媛�源뚯썙吏��꾨줉 �덈퉬 議곗젙 */
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* �꾨줈�� 諛� �곸꽭蹂닿린 移쇰읆 */
+.profile-column, .details-column {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* �щ챸�� �곗깋 諛곌꼍 */
+    color: #333;
+}
+
+.profile-column {
+    width: 30%;
+    text-align: center;
+    border-right: none;
+    margin-right: 20px;
+}
+
+.details-column {
+    width: 70%;
+}
+
+/* �꾨줈�� �대�吏� */
+.profile-img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 5px solid #f9a602; /* �곕쑜�� �몃��� �뚮몢由� */
+    object-fit: cover;
+}
+
+.profile-name {
+    margin-top: 15px;
+    font-size: 24px;
+    color: #f57c00; /* 諛앹� 二쇳솴�� */
+    font-weight: bold;
+}
+
+/* �곸꽭蹂닿린 �뚯씠釉� �ㅽ��� */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.9); /* �щ챸�� �곗깋 諛곌꼍 */
+    border-radius: 10px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05); /* �뚮몢由� 洹몃┝�� */
+}
+
+th, td {
+    padding: 16px;
+    font-size: 18px; /* �띿뒪�� �ш린 �뺣� */
+    color: #333;
+    border: 0.8px solid #f0f0f0; /* �� �뉕퀬 諛앹� �뚯깋 �뚮몢由� */
+}
+
+th {
+    background-color: #ffe0b2; /* 諛앹� �ㅻ젋吏��� 諛곌꼍 */
+    font-weight: bold;
+    text-align: left;
+    width: 35%;
+}
+
+td {
+    background-color: #fffbf2; /* 諛앹� �щ┝�� */
+    width: 65%;
+}
+
+/* 踰꾪듉 �ㅽ��� */
+#modify, #delete {
+    padding: 12px 24px;
+    font-size: 18px;
+    margin: 0 5px;
+    cursor: pointer;
+    background-color: #f57c00; /* 諛앹� 二쇳솴�� */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15); /* 踰꾪듉 洹몃┝�� 異붽� */
+}
+
+#modify:hover, #delete:hover {
+    background-color: #ff9800; /* �� 諛앹� 二쇳솴�� */
+}
+
+/* 踰꾪듉�� �ы븿�� �� 媛��대뜲 �뺣젹 */
+th[colspan="2"] {
+    text-align: center;
+    border: none;
+    background-color: transparent;
+}

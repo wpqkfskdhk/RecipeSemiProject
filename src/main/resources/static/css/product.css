@@ -1,0 +1,326 @@
+/* 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.nice-select {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+.favorite i {
+
+    font-size: 24px;
+    color: grey;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.fa-heart{
+    padding-top: 25px;
+}
+
+/* 입력 컨테이너 */
+.InputContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 요소들을 수평 가운데 정렬 */
+    height: 50px; /* 입력 컨테이너 높이 */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
+    padding: 0 10px;
+    width: 400px; /* 최대 너비 */
+    margin: 0 auto; /* 화면 가운데 정렬 */
+    margin-bottom: 20px; /* 검색창 아래 여백 추가 */
+    box-sizing: border-box; /* padding 포함하여 크기 계산 */
+}
+
+/* 카테고리 드롭다운 */
+#category {
+    width: 130px;
+    height: 100%; /* 부모 컨테이너 높이에 맞추기 */
+    border: none;
+    outline: none;
+    border-radius: 30px 0 0 30px;
+    padding: 0;
+    background-color: rgb(240, 240, 240);
+    color: rgb(34, 139, 34);
+    font-size: 14px;
+    text-align: center; /* 드롭다운 텍스트 중앙 정렬 */
+}
+
+/* 검색창 */
+.input {
+    flex-grow: 1;
+    height: 100%; /* 부모 컨테이너 높이에 맞추기 */
+    border: none;
+    outline: none;
+    background-color: rgb(200, 255, 200); /* 배경색 */
+    color: rgb(34, 34, 34);
+    font-size: 14px;
+    padding: 0 10px;
+    border-radius: 0 30px 30px 0; /* 둥근 테두리 */
+}
+
+/* 검색 버튼 */
+#searchBtn {
+    width: 40px;
+    height: 40px; /* 버튼 크기 */
+    background: rgb(255, 255, 255);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.075);
+    margin-left: 10px; /* 검색창과 버튼 사이 간격 */
+}
+
+/* 버튼 내부 SVG 색상 */
+#searchBtn svg circle,
+#searchBtn svg line {
+    stroke: rgb(34, 139, 34);
+}
+
+/* 상품 카드 */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding: 15px;
+    text-align: center;
+}
+
+/* 카드 이미지 */
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+/* 카드 내용 */
+.card-body {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-title {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.card-text {
+    margin: 5px 0;
+}
+
+.product-info {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* 상품 버튼 */
+.btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+/* 페이지 번호 섹션 */
+#numbering {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #333;
+    text-align: center; /* 가운데 정렬 */
+}
+
+.prev, .next, .iNum {
+    margin: 0 5px;
+}
+
+.iNum {
+    font-weight: bold;
+}
+
+
+#numbering a {
+    display: inline-block; /* 인라인 블록으로 설정하여 간격 조절 */
+    margin: 0 5px; /* 버튼 간 간격 */
+    padding: 5px 10px; /* 버튼 패딩 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+.prev {
+    display: inline-flex; /* 글자 크기에 맞게 조정되도록 'inline-flex'로 변경 */
+    height: auto; /* 자동 높이 설정 */
+    padding: 0.5em 1em; /* 글자 크기에 맞게 패딩 조절 */
+    align-items: center;
+    justify-content: center;
+    background-color: #90ee90; /* 밝은 초록색 */
+    border-radius: 3px;
+    letter-spacing: 1px;
+    transition: all 0.2s linear;
+    cursor: pointer;
+    background: #90ee90; /* 밝은 초록색 */
+    text-decoration: none; /* 링크 기본 밑줄 제거 */
+    font-size: 16px; /* 글자 크기 설정 */
+    border: 1px solid #333; /* 얇은 검정 테두리 */
+}
+
+.prev > svg {
+    margin-right: 5px;
+    margin-left: 5px;
+    font-size: 20px;
+    transition: all 0.4s ease-in;
+}
+
+.prev:hover > svg {
+    font-size: 1.2em;
+    transform: translateX(-5px);
+}
+
+.prev:hover {
+    box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
+    transform: translateY(-2px);
+}
+.next {
+    border: 1px solid #333; /* 얇은 검정 테두리 */
+    display: inline-flex; /* 글자 크기에 맞게 조정되도록 'inline-flex'로 변경 */
+    height: auto; /* 자동 높이 설정 */
+    padding: 0.5em 1em; /* 글자 크기에 맞게 패딩 조절 */
+    align-items: center;
+    justify-content: center;
+    background-color: #90ee90; /* 밝은 초록색 */
+    border-radius: 3px;
+    letter-spacing: 1px;
+    transition: all 0.2s linear;
+    cursor: pointer;
+    background: #90ee90; /* 밝은 초록색 */
+    text-decoration: none; /* 링크 기본 밑줄 제거 */
+    font-size: 16px; /* 글자 크기 설정 */
+}
+
+.next > svg {
+    margin-right: 5px;
+    margin-left: 5px;
+    font-size: 20px;
+    transition: all 0.4s ease-in;
+}
+
+.next:hover > svg {
+    font-size: 1.2em;
+    transform: translateX(-5px);
+}
+
+.next:hover {
+    box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
+    transform: translateY(-2px);
+}
+.iNum {
+    display: inline-block;
+    padding: 0.5em 1em;
+    margin: 0 0.2em;
+    text-decoration: none;
+    color: #333;
+    background-color: #f0f0f0;
+    border-radius: 3px;
+    border: 1px solid #333; /* 얇은 검정 테두리 */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+/* 현재 페이지 번호 강조 스타일 */
+.iNum.current {
+    font-weight: bold;
+    color: #333333; /* 글자색을 흰색으로 */
+    background-color: #f0f0f0;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
+}
+
+/* addcart 버튼 스타일 */
+.addcart {
+    position: relative;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #34974d;
+    background-color: #3aa856;
+    color: #fff;
+    font-weight: 600;
+    overflow: hidden;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.addcart__text {
+    position: relative;
+    z-index: 2;
+    transition: color 0.3s;
+}
+
+.addcart__icon {
+    position: absolute;
+    right: 10px;
+    width: 0;
+    height: 100%;
+    background-color: #34974d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: width 0.3s;
+}
+
+.addcart__icon .svg {
+    width: 24px;
+    height: 24px;
+    stroke: #fff;
+    transition: stroke 0.3s;
+}
+
+/* Hover 상태에서 아이콘 확장 */
+.addcart:hover {
+    background-color: #34974d;
+}
+
+.addcart:hover .addcart__text {
+    color: transparent;
+}
+
+.addcart:hover .addcart__icon {
+    width: 100%;
+    right: 0;
+}
+
+.addcart:active {
+    background-color: #2e8644;
+    border-color: #2e8644;
+}
+
+/* AJAX로 업데이트되는 요소 스타일 */
+#cart-items {
+    font-size: 14px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+#total-price, #final-price {
+    font-weight: bold;
+    color: #3aa856;
+    margin-top: 5px;
+    display: block;
+    text-align: right;
+}

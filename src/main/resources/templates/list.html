@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/css/blist.css">
+  <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+  <!-- index로 돌아가기 버튼 -->
+
+  <title>문의게시판</title>
+</head>
+
+
+<body>
+<form action="">
+
+<div class="container" id="list">
+  <div class="backToIndex" style="text-align: left">
+    <span class="arrow" >&lt;</span>
+  </div>
+  <h1>문의 게시판</h1>
+
+  <!-- 검색 섹션 -->
+  <div class="search-section">
+    <select id="category">
+      <option value="BWriter">작성자</option>
+      <option value="BTitle">제목</option>
+      <option value="BContent">내용</option>
+    </select>
+    <input type="text" id="keyword" />
+    <button id="searchBtn">검색</button>
+
+    <!-- 게시글 갯수 변경 -->
+    <select id="limit">
+      <option value="5">5개씩</option>
+      <option value="10">10개씩</option>
+      <option value="20">20개씩</option>
+    </select>
+
+    <!-- 게시글 작성 버튼 -->
+    <input id="write" type="button" value="문의글작성">
+  </div>
+
+  <!-- 게시글 테이블 -->
+  <table>
+    <thead>
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>작성일</th>
+      <th>조회수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 데이터가 여기에 로드됩니다. -->
+    </tbody>
+  </table>
+
+
+
+  <!-- 페이지 번호 섹션 -->
+  <div id="numbering"></div>
+
+
+
+
+</div>
+
+
+
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script>
+    $('#write').click(() => {
+      location.href = "/bWriteForm";
+    });
+    $('.arrow').click(() => {
+      location.href = "/index"; // index 페이지 경로로 이동
+    });
+  const today = new Date();
+    const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+  const dd = String(today.getDate()).padStart(2, '0');
+
+  const currentDate = `${yyyy}-${mm}-${dd}`;
+
+  let list = [];
+  let page = 1;       // 페이지 번호
+  let limit = 5;      // 한페이지에 출력될 데이터 갯수
+  const block = 5;    // 한페이지에 출력될 페이지 갯수
+  let count = 0;      // 전체 데이터 갯수
+
+  // 페이지 로딩 후 ajax로 게시글 불러오기
+  $(()=>{
+    $.ajax({
+      type : "post",
+      url : "/boardList",
+      dataType : "json",
+
+      success : (result) => {
+        list = result;
+        console.log(list);
+        // result : 게시글 목록
+        pagingList(page, list);
+
+      },
+      error : ()=>{
+        alert('boardList 통신 실패!');
+      }
+    });
+  });
+
+  function pagingList(page, list){
+    count = list.length;        // 전체 게시글 갯수
+
+    if(count > 0){
+      let maxPage = Math.ceil(count/limit);
+      if(page > maxPage){
+        page = maxPage;
+      }
+
+      let startRow = (page - 1) * limit;      // 0 5 10 15 ...
+      let endRow = page * limit - 1;          // 4 9 14 19 ...
+      if(endRow >= count){
+        endRow = count - 1;
+      }
+
+      let startPage = (Math.ceil(page/block)-1) * block + 1;  // 1 1 1 1 1  6  6  6  6  6 ..
+      let endPage = startPage + block - 1;                    // 5 5 5 5 5 10 10 10 10 10 ..
+      if(endPage > maxPage){
+        endPage = maxPage;
+      }
+
+      // <th>번호</th>
+      // <th>제목</th>
+      // <th>작성자</th>
+      // <th>작성일</th>
+      // <th>조회수</th>
+
+      let output = "";
+      for(let i=startRow; i<=endRow; i++){
+        output += `
+                <tr>
+                    <td>${list[i].bnum}</td>
+                    <td><a href="/bView/${list[i].bnum}">${list[i].btitle}</a></td>
+                    <td>${list[i].bwriter}</td>`
+
+        if(currentDate == `${list[i].bdate.substring(0, 10)}`){
+          // output += `<td>${list[i].bdate.substring(11, 19)}</td>`;
+          output += `<td>${list[i].bdate.substring(0, 10)}</td>`;
+        } else {
+          output += `<td>${list[i].bdate.substring(0, 10)}</td>`;
+        }
+
+        output += `<td>${list[i].bhit}</td></tr>`;
+      }
+
+      $('tbody').empty();
+      $('tbody').append(output);
+
+      // numbering 페이징 처리
+      let pageNum = "";
+
+      // 현재 페이지에서 -1을 했을때 1보다 작으면 "1" 값을,
+      // 1보다 크거나 같으면 "page-1" 값을 prev 변수에 담는다
+      let prev = (page - 1 < 1 ? 1 : page - 1);
+      /*
+          if(page-1 < 1){
+              prev = 1;
+          } else {
+              prev = page - 1;
+          }
+       */
+
+      // 현재 페이지에서 +1을 했을때 maxPage보다 크거나 같으면 "maxPage" 값을,
+      // maxPage 값보다 작으면 "page+1" 값을 next 변수에 담는다.
+      let next = (page + 1 >= maxPage ? maxPage : page + 1);
+
+      // [이전]
+      if(page <= 1){
+        pageNum += `<span class="prev"> 이전 </span>`;
+      } else {
+        pageNum += `<a href="#" class="prev" data-page="${prev}"> 이전 </a>`;
+      }
+
+      // [번호]
+      for(let i=startPage; i<=endPage; i++){
+        if(page == i){
+          pageNum += `<span class="iNum"> ${i} </span>`;
+        } else {
+          pageNum += `<a href="#" class="iNum" data-page="${i}"> ${i} </a>`;
+        }
+      }
+
+      // [다음]
+      if(page >= maxPage){
+        pageNum += `<span class="next"> 다음 </span>`;
+      } else {
+        pageNum += `<a href="#" class="next" data-page="${next}"> 다음 </a>`;
+      }
+
+      $('#numbering').empty();
+      $('#numbering').append(pageNum);
+
+      $(document).on('click', '#numbering a', function(e){
+        page = parseInt($(this).data('page'));
+        pagingList(page, list);
+      });
+    } else {
+      $('tbody').empty();
+    }
+
+  }
+
+  // 게시글 갯수 변경
+  $('#limit').change(()=>{
+    page = 1;
+    limit = parseInt($('#limit').val());
+    pagingList(page, list);
+  });
+
+  // 게시글 검색
+  $('#searchBtn').click(()=>{
+    let category = $('#category').val();
+    let keyword = $('#keyword').val();
+
+    $.ajax({
+      type : "POST",
+      url : "/bsearchList",
+      data : {
+        "category" : category,
+        "keyword" : keyword
+      },
+      dataType: "json",
+      success : (result) => {
+        list = result;
+        console.log(list);
+        pagingList(page, list);
+      },
+      error : ()=>{
+        alert('searchList 통신 실패!');
+      }
+    });
+  });
+
+
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
